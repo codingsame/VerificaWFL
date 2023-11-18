@@ -25,29 +25,18 @@
     <div class="container">
         <div class="centered-text">
             <h1> Verifica vincite Win For Life </h1>
-            <div class="row">
-                <div class="col">
-                    <form action="scanner" method="post">
-                        <input type="hidden" name="game" value="Classico">
-                        <input type="submit" value="Scansiona codice QR Classico" class="btn btn-success">
-                    </form>
-                    <button type="button" class="btn btn-success">Scannerizza codice QR
-                        Classico</button>
-                </div>
-                <div class="col">
-                    <!-- <div id="reader" type="button" class="btn btn-success">Scannerizza codice QR -->
-                    <!-- Grattacieli</button> -->
-                </div>
-            </div>
+
+            <input type="radio" class="btn-check" name="gametype" id="classico-check" value='classico' checked>
+            <label class="btn btn-outline-success" for="classico-check">Win For Life Classico</label>
+
+            <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli">
+            <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
         </div>
+    </div>
 
     </div>
 
-    <h1 id="win_amount"> {{ win_message }} </h1>
-    <form method="POST" action="/checkwin">
-        <input name="game_type" type="radio" value="classico" checked> classico
-        <input name="game_type" type="radio" value="grattacieli"> grattacieli
-    </form>
+    <h1 id="win_amount"></h1>
     <main>
         <div id="reader"></div>
         <div id="result"></div>
@@ -56,52 +45,49 @@
 
 </body>
 <script>
-    // const scanner = new Html5QrcodeScanner('reader', {
-    //     // qrbox: {
-    //     //     width: 250,
-    //     //     height: 250
-    //     // },
-    //     fps: 20
-    // });
+    const scanner = new Html5QrcodeScanner('reader', {
+        fps: 20,
+        aspectRatio: 1
+    });
 
-    // scanner.render(success, error);
+    scanner.render(success, error);
 
-    // function success(res) {
-    //     scanner.clear();
-    //     let path = '/checkwin'
-    //     const url = new URL(res);
+    function success(res) {
+        scanner.clear();
+        let path = '/checkwin'
+        const url = new URL(res);
 
-    //     const y = url.searchParams.get('Y'); // => 'hello'
-    //     const c = url.searchParams.get('C'); // => null
-    //     const prsn = url.searchParams.get('PrSN');
-    //     const gt = $("input[name='game_type']:checked").val();
+        const y = url.searchParams.get('Y'); // => 'hello'
+        const c = url.searchParams.get('C'); // => null
+        const prsn = url.searchParams.get('PrSN');
+        const gt = $("input[name='gametype']:checked").val();
+        console.log(gt)
+        $.ajax({
+            type: 'POST',
+            url: "/checkwin",
+            data: {
+                'Y': y,
+                'C': c,
+                'PrSN': prsn,
+                'game_type': gt
+            },
+            success: function (text) {
+                let win_msg;
+                if (text['win'] == 0)
+                    win_msg = "Nessuna vincita.";
+                else
+                    win_msg = `Vincita di ${text['win']} euro.`
+                document.getElementById("win_amount").innerText = win_msg;
+            }
+        }
+        )
 
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: "/checkwin",
-    //         data: {
-    //             'Y': y,
-    //             'C': c,
-    //             'PrSN': prsn,
-    //             'game_type': gt
-    //         },
-    //         success: function (text) {
-    //             let win_msg;
-    //             if (text['win'] == 0)
-    //                 win_msg = "Nessuna vincita.";
-    //             else
-    //                 win_msg = `Vincita di ${text['win']} euro.`
-    //             document.getElementById("win_amount").innerText = win_msg;
-    //         }
-    //     }
-    //     )
+        scanner.render(success, error);
 
-    //     scanner.render(success, error);
+    }
 
-    // }
-
-    // function error(res) {
-    // }
+    function error(res) {
+    }
 </script>
 
 </html>
