@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scansione Codice QR</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+
+<body>
+    <h1 id="gametype">{{ gametype }}</h1>
+    <div id="reader"></div>
+    <div id="result"></div>
+    <script>
+        console.log(gt)
+        const scanner = new Html5QrcodeScanner('reader', {
+            // qrbox: {
+            //     width: 250,
+            //     height: 250
+            // },
+            fps: 20
+        });
+
+        scanner.render(success, error);
+
+        function success(res) {
+            scanner.clear();
+            let path = '/checkwin';
+            const url = new URL(res);
+
+            const y = url.searchParams.get('Y'); // => 'hello'
+            const c = url.searchParams.get('C'); // => null
+            const prsn = url.searchParams.get('PrSN');
+            const gt = document.getElementById('gametype');
+
+            $.ajax({
+                type: 'POST',
+                url: "/checkwin",
+                data: {
+                    'Y': y,
+                    'C': c,
+                    'PrSN': prsn,
+                    'game_type': gt
+                },
+                success: function (text) {
+                    let win_msg;
+                    if (text['win'] == 0)
+                        win_msg = "Nessuna vincita.";
+                    else
+                        win_msg = `Vincita di ${text['win']} euro.`
+                    document.getElementById("result").innerText = win_msg;
+                }
+            }
+            )
+
+            scanner.render(success, error);
+
+        }
+
+        function error(res) {
+        }
+    </script>
+</body>
+
+</html>
