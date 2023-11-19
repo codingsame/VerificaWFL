@@ -17,30 +17,33 @@
             text-align: center;
             font-weight: bold;
         }
+        .rounded{
+            border-radius: 25px;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <div class="centered-text">
-            <h1> Verifica vincite Win For Life </h1>
+        <div class="centered-text rounded">
+            <h1 class="rounded" style="background-color: #007E47; color:white"> Verifica vincite Win For Life </h1>
+            <h1 id="win_amount"></h1>
+            
+        </div>
 
-            <input type="radio" class="btn-check" name="gametype" id="classico-check" value='classico' checked>
-            <label class="btn btn-outline-success" for="classico-check">Win For Life Classico</label>
+        <div class="container rounded" style="background-color: white;">
+
+            <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'>
+            <label class="btn btn-outline-success rounded" for="classico-check">Win For Life Classico</label>
 
             <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli">
             <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
+            <main class="rounded">
+                <div id="reader" class="rounded"></div>
+                <div id="result"></div>
+            </main>
         </div>
-    </div>
-
-    </div>
-
-    <h1 id="win_amount"></h1>
-    <main>
-        <div id="reader"></div>
-        <div id="result"></div>
-    </main>
     </div>
 
 </body>
