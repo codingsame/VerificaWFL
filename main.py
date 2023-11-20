@@ -85,7 +85,7 @@ def winmessage():
     if request.form["win"] == "0":
         return render_template("winmessage.html", amount="Nessuna vincita.")
     else:
-        return render_template("winmessage.html", amount=request.form["win"])
+        return render_template("winmessage.html", amount=f'Hai vinto: {request.form["win"]}€')
 
 
 if __name__ == "__main__":
