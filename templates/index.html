@@ -24,35 +24,53 @@
     </style>
 </head>
 
-<body>
-
-    <div class="container">
-        <div class="centered-text rounded">
+<body>        
+    <div class="centered-text rounded">
             <h1 class="rounded" style="background-color: #007E47; color:white"> Verifica vincite Win For Life </h1>
-            <h1 id="win_amount"></h1>
-
         </div>
 
-        <div class="container rounded" style="background-color: white;">
+<table>
+    <tr>
+        <td>
+            <div class="container">
 
-            <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'
-                onclick="showQr();">
-            <label class="btn btn-outline-success rounded" for="classico-check">Win For Life Classico</label>
+                <div class="container rounded" style="background-color: white;">
 
-            <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli"
-                onclick="showQr();">
-            <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
-            <main class="rounded" id="qrReader" hidden>
-                <div id="reader" class="rounded"></div>
-                <div id="result"></div>
-            </main>
-        </div>
-    </div>
+                    <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'
+                        onclick="showHidden();">
+                    <label class="btn btn-outline-success rounded" for="classico-check">Win For Life Classico</label>
 
+                    <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli"
+                        onclick="showHidden();">
+                    <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
+                    <main class="rounded" id="qrReader" hidden>
+                        <div id="reader" class="rounded"></div>
+                        <div id="result"></div>
+                    </main>
+                </div>
+            </div>
+        </td>
+        <td>
+            <a id="archiveToggle" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" hidden>
+                Archivio vincite
+            </a>
+
+            <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                    <ul>
+                        <li>First</li>
+                    </ul>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
 </body>
+
 <script>
-    function showQr() {
+    function showHidden() {
         document.getElementById('qrReader').hidden = false;
+        document.getElementById('archiveToggle').hidden = false;
     }
     const scanner = new Html5QrcodeScanner('reader', {
         qrbox: {
