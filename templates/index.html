@@ -35,12 +35,14 @@
 
         <div class="container rounded" style="background-color: white;">
 
-            <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'>
+            <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'
+                onclick="showQr();">
             <label class="btn btn-outline-success rounded" for="classico-check">Win For Life Classico</label>
 
-            <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli">
+            <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli"
+                onclick="showQr();">
             <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
-            <main class="rounded">
+            <main class="rounded" id="qrReader" hidden>
                 <div id="reader" class="rounded"></div>
                 <div id="result"></div>
             </main>
@@ -49,6 +51,9 @@
 
 </body>
 <script>
+    function showQr() {
+        document.getElementById('qrReader').hidden = false;
+    }
     const scanner = new Html5QrcodeScanner('reader', {
         qrbox: {
             height: 250,
