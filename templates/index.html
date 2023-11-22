@@ -21,57 +21,106 @@
         .rounded {
             border-radius: 25px;
         }
+
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-container-row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .popup {
+            width: 400px;
+            background: #ddd;
+            border-radius: 6px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.1);
+            text-align: center;
+            padding: 0 30px 30px;
+            color: #333;
+            visibility: hidden;
+            transition: 0.4s, top 0.4s;
+            z-index: 100;
+        }
+
+        .popup img {
+            width: 100px;
+            margin-top: -50px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup button {
+            margin-top: 50px;
+            border: 0;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .open-popup {
+            visibility: visible;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(1);
+        }
     </style>
 </head>
 
-<body>        
+<body>
     <div class="centered-text rounded">
-            <h1 class="rounded" style="background-color: #007E47; color:white"> Verifica vincite Win For Life </h1>
+        <h1 class="rounded" style="background-color: #007E47; color:white"> Verifica vincite Win For Life </h1>
+    </div>
+
+    <div class="flex-container">
+        <div id="popup" class="popup">
+            <img id="outcome" />
+            <h2 id="win-message">Hai vinto dosento mila euro</h2>
+            <p>Vuoi aggiungere questa schedina al tuo archivio?</p>
+            <div class="flex-container-row">
+                <button type="button" class="btn btn-outline-success flex-fill"
+                    onclick="closePopup();">Aggiungi</button>
+                <button type="button" class="btn btn-outline-primary" onclick="closePopup();">Prosegui</button>
+            </div>
         </div>
+        <div class="container">
 
-<table>
-    <tr>
-        <td>
-            <div class="container">
+            <div class="container rounded" style="background-color: white;">
 
-                <div class="container rounded" style="background-color: white;">
+                <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'
+                    onclick="showHidden();">
+                <label class="btn btn-outline-success rounded" for="classico-check">Win For Life
+                    Classico</label>
 
-                    <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'
-                        onclick="showHidden();">
-                    <label class="btn btn-outline-success rounded" for="classico-check">Win For Life Classico</label>
-
-                    <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli"
-                        onclick="showHidden();">
-                    <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
-                    <main class="rounded" id="qrReader" hidden>
-                        <div id="reader" class="rounded"></div>
-                        <div id="result"></div>
-                    </main>
-                </div>
+                <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli"
+                    onclick="showHidden();">
+                <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
+                <main class="rounded readerSize" id="qrReader" hidden>
+                    <div id="reader" class="rounded"></div>
+                    <div id="result"></div>
+                </main>
             </div>
-        </td>
-        <td>
-            <a id="archiveToggle" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" hidden>
-                Archivio vincite
-            </a>
+        </div>
+        <a id="archiveToggle" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
+            aria-expanded="false" aria-controls="collapseExample" hidden>
+            Archivio vincite
+        </a>
 
-            <div class="collapse" id="collapseExample">
+        <div class="collapse" id="collapseExample">
             <div class="card card-body">
-                    <ul>
-                        <li>First</li>
-                    </ul>
-                </div>
+                <ul id="winArchive">
+                </ul>
             </div>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
 </body>
 
 <script>
-    function showHidden() {
-        document.getElementById('qrReader').hidden = false;
-        document.getElementById('archiveToggle').hidden = false;
-    }
     const scanner = new Html5QrcodeScanner('reader', {
         qrbox: {
             height: 250,
@@ -80,6 +129,16 @@
         fps: 20,
         aspectRatio: 1
     });
+    function closePopup() {
+        let popup = document.getElementById('popup');
+        popup.classList.remove('open-popup');
+        scanner.render(success, error);
+    }
+    function showHidden() {
+        document.getElementById('qrReader').hidden = false;
+        document.getElementById('archiveToggle').hidden = false;
+    }
+
 
     scanner.render(success, error);
 
@@ -103,20 +162,29 @@
                 'game_type': gt
             },
             success: function (text) {
-                var url = '/winmessage';
-                var form = $('<form action="/winmessage" method="post">' +
-                    '<input type="text" name="win" value="' + text['win'] + '" />' +
-                    '</form>');
-                $('body').append(form);
-                form.submit();
+                // var url = '/winmessage';
+                // var form = $('<form action="/winmessage" method="post">' +
+                //     '<input type="text" name="win" value="' + text['win'] + '" />' +
+                //     '</form>');
+                // $('body').append(form);
+                // form.submit();
+                let winmsg;
+                let msg_element = document.getElementById('win-message');
+                let popup = document.getElementById('popup');
+                let image = document.getElementById('outcome');
+                if (text['win'] == '0') {
+                    winmsg = "Schedina non vincente";
+                    image.src = "{{url_for('static', filename='fail.png')}}"
+                }
+                else {
+                    winmsg = "Hai vinto " + text['win'] + "€.";
+                    image.src = "{{url_for('static', filename='tick.png')}}"
+                }
+                msg_element.innerText = winmsg;
+                popup.classList.add('open-popup');
             }
         }
-
         )
-        scanner.render(success, error);
-
-
-
     }
 
     function error(res) {
