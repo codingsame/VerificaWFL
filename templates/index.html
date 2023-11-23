@@ -32,6 +32,12 @@
             flex-direction: row;
         }
 
+        .flex-center {
+            justify-content: center;
+            align-items: center;
+
+        }
+
         .popup {
             width: 400px;
             background: #ddd;
@@ -84,13 +90,13 @@
             <p>Vuoi aggiungere questa schedina al tuo archivio?</p>
             <div class="flex-container-row">
                 <button type="button" class="btn btn-outline-success flex-fill"
-                    onclick="closePopup();">Aggiungi</button>
-                <button type="button" class="btn btn-outline-primary" onclick="closePopup();">Prosegui</button>
+                    onclick="closePopup(true);">Aggiungi</button>
+                <button type="button" class="btn btn-outline-primary" onclick="closePopup(false);">Prosegui</button>
             </div>
         </div>
         <div class="container">
 
-            <div class="container rounded" style="background-color: white;">
+            <div class="flex-container-row rounded flex-center" style="background-color: white;">
 
                 <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'
                     onclick="showHidden();">
@@ -100,27 +106,33 @@
                 <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli"
                     onclick="showHidden();">
                 <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
-                <main class="rounded readerSize" id="qrReader" hidden>
-                    <div id="reader" class="rounded"></div>
-                    <div id="result"></div>
-                </main>
+
             </div>
+            <main class="rounded readerSize" id="qrReader" hidden>
+                <div id="reader" class="rounded"></div>
+                <div id="result"></div>
+            </main>
         </div>
+    </div>
+    <div class="flex-container flex-center">
         <a id="archiveToggle" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
-            aria-expanded="false" aria-controls="collapseExample" hidden>
+            aria-expanded="false" aria-controls="collapseExample">
             Archivio vincite
         </a>
-
-        <div class="collapse" id="collapseExample">
-            <div class="card card-body">
-                <ul id="winArchive">
-                </ul>
-            </div>
+    </div>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            <ul id="winArchive">
+            </ul>
         </div>
+    </div>
+
     </div>
 </body>
 
 <script>
+
+    //TODO: fill ul #archivioVincite at startup by loading savedGames (+ get relevant data from it (extractionNo, id, win))
     const scanner = new Html5QrcodeScanner('reader', {
         qrbox: {
             height: 250,
@@ -129,14 +141,28 @@
         fps: 20,
         aspectRatio: 1
     });
-    function closePopup() {
+    let currentGame;
+    function closePopup(archiveOutcome) {
+        if (archiveOutcome) {
+            if (localStorage.getItem("savedGames") === null) {
+                localStorage.setItem("savedGames", "[]");
+            }
+            let currentSavedGames = JSON.parse(localStorage.getItem("savedGames"));
+            currentSavedGames.push(currentGame);
+            localStorage.setItem("savedGames", JSON.stringify(currentSavedGames));
+
+            let outcomeList = document.getElementById('winArchive');
+            let newOutcome = document.createElement('li');
+            newOutcome.innerText = currentGame;
+            outcomeList.appendChild(newOutcome);
+        }
         let popup = document.getElementById('popup');
         popup.classList.remove('open-popup');
         scanner.render(success, error);
     }
     function showHidden() {
         document.getElementById('qrReader').hidden = false;
-        document.getElementById('archiveToggle').hidden = false;
+        // document.getElementById('archiveToggle').hidden = false;
     }
 
 
@@ -151,7 +177,7 @@
         const c = url.searchParams.get('C'); // => null
         const prsn = url.searchParams.get('PrSN');
         const gt = $("input[name='gametype']:checked").val();
-        console.log(gt)
+
         $.ajax({
             type: 'POST',
             url: "/checkwin",
@@ -162,26 +188,21 @@
                 'game_type': gt
             },
             success: function (text) {
-                // var url = '/winmessage';
-                // var form = $('<form action="/winmessage" method="post">' +
-                //     '<input type="text" name="win" value="' + text['win'] + '" />' +
-                //     '</form>');
-                // $('body').append(form);
-                // form.submit();
                 let winmsg;
                 let msg_element = document.getElementById('win-message');
                 let popup = document.getElementById('popup');
                 let image = document.getElementById('outcome');
-                if (text['win'] == '0') {
+                if (text['amount'] == 0) {
                     winmsg = "Schedina non vincente";
                     image.src = "{{url_for('static', filename='fail.png')}}"
                 }
                 else {
-                    winmsg = "Hai vinto " + text['win'] + "€.";
+                    winmsg = "Hai vinto " + text['amount'] + "€.";
                     image.src = "{{url_for('static', filename='tick.png')}}"
                 }
                 msg_element.innerText = winmsg;
                 popup.classList.add('open-popup');
+                currentGame = JSON.stringify(text);
             }
         }
         )

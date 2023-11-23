@@ -16,7 +16,7 @@ def parse_link(qr_link: str):
     return (contest_no, contest_id, contest_year)
 
 
-def check_win(contest_no: str, contest_year: str, contest_id: str, game: str):
+def make_api_request(contest_no: str, contest_year: str, contest_id: str, game: str):
     URL = 'https://www.gntn-pgd.it/gntn-info-verifica-schedina-nlp/rest/fe/winforlife' + game
 
     json_data = {
@@ -36,16 +36,16 @@ def check_win(contest_no: str, contest_year: str, contest_id: str, game: str):
     return response.text
 
 
-def final(no, id, year, game):
+def calculate_win_amount(no, id, year, game):
     amount = 0
-    resp = check_win(no, year, id, game)
+    resp = make_api_request(no, year, id, game)
     d = json.loads(resp)
     unparsed_weens = d["vincita"]
     for ween in unparsed_weens:
         ween_type = ween["tipoDiVincita"]
         amount += int((int(ween_type["count"]) *
                       int(ween_type["valore"])) / 100)
-    return amount
+    return {'data': resp, 'amount': amount}
 
 
 app = Flask(__name__)
@@ -56,14 +56,6 @@ def my_form():
     return render_template('index.html')
 
 
-# @app.route('/', methods=['POST'])
-# def my_form_post():
-#     url = request.form['url']
-#     game = request.form['game_type']
-#     print(url, game)
-#     return render_template('index.html', win_message=f"Hai vinto {final(url, game)} €.")
-
-
 @app.route('/checkwin', methods=['POST'])
 def checkwin():
     print(request.form)
@@ -72,7 +64,7 @@ def checkwin():
     y = form["Y"]
     prsn = form["PrSN"]
     gt = form["game_type"]
-    return {'win': final(no, prsn, y, gt)}
+    return calculate_win_amount(no, prsn, y, gt)
 
 
 @app.route('/scanner', methods=['POST'])
