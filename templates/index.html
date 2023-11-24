@@ -122,7 +122,7 @@
     </div>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
-            <table id="winArchive">
+            <table id="winArchive" class="table">
                 <thead>
                     <tr>
                         <th>Tipologia Gioco</th>
@@ -136,36 +136,22 @@
     </div>
 
     </div>
+    
 </body>
 
 <script>
-
     //TODO: fill ul #archivioVincite at startup by loading savedGames (+ get relevant data from it (extractionNo, numbers, winAmount))
-    const scanner = new Html5QrcodeScanner('reader', {
-        qrbox: {
-            height: 250,
-            width: 250
-        },
-        fps: 20,
-        aspectRatio: 1
-    });
-    let currentGame;
-    function closePopup(acceptSaveOutcome) {
-        if (acceptSaveOutcome) {
-            if (localStorage.getItem("savedGames") === null) {
-                localStorage.setItem("savedGames", "[]");
-            }
-            let currentSavedGames = JSON.parse(localStorage.getItem("savedGames"));
-            currentSavedGames.push(currentGame);
-            localStorage.setItem("savedGames", JSON.stringify(currentSavedGames));
-            let outcomeList = document.getElementById('winArchive');
-
-            let cg = JSON.parse(currentGame);
-
-            let game = cg['gioco'];
-            let contest = cg['contest'];
-            let id = cg['idschedina'];
-            let amount = cg['amount'];
+    if (!(localStorage.getItem("savedGames") === null)){
+        const data = JSON.parse(localStorage.getItem("savedGames"));
+        let outcomeList = document.getElementById('winArchive');
+        
+        for (let game of data){
+            let truegame = JSON.parse(game);
+            
+            let gioco = truegame['gioco'];
+            let contest = truegame['contest'];
+            let id = truegame['idschedina'];
+            let amount = truegame['amount'];
 
             let newOutcome = document.createElement('tr');
             let gametd = document.createElement('td');
@@ -173,7 +159,7 @@
             let idtd = document.createElement('td');
             let amounttd = document.createElement('td');
 
-            gametd.innerText = game;
+            gametd.innerText = gioco;
             contesttd.innerText = contest;
             idtd.innerText = id;
             amounttd.innerText = amount;
@@ -184,6 +170,64 @@
             newOutcome.appendChild(amounttd);
 
             outcomeList.appendChild(newOutcome);
+        }
+    }
+    const scanner = new Html5QrcodeScanner('reader', {
+        qrbox: {
+            height: 250,
+            width: 250
+        },
+        fps: 20,
+        aspectRatio: 1
+    });
+    let currentGame;
+
+    function closePopup(acceptSaveOutcome) {
+        if (acceptSaveOutcome) {
+            if (localStorage.getItem("savedGames") === null) {
+                localStorage.setItem("savedGames", "[]");
+            }
+            
+            let currentSavedGames = JSON.parse(localStorage.getItem("savedGames"));
+            let gameAlreadyScanned = false;
+            
+            for (let game of currentSavedGames){
+                let truegame = JSON.parse(game);
+                if (truegame["idschedina"] == currentGame["idschedina"])
+                    gameAlreadyScanned = true;
+            }
+
+            // if (!gameAlreadyScanned){
+                currentSavedGames.push(currentGame);
+                
+                localStorage.setItem("savedGames", JSON.stringify(currentSavedGames));
+                let outcomeList = document.getElementById('winArchive');
+
+                let cg = JSON.parse(currentGame);
+
+                let game = cg['gioco'];
+                let contest = cg['contest'];
+                let id = cg['idschedina'];
+                let amount = cg['amount'];
+
+                let newOutcome = document.createElement('tr');
+                let gametd = document.createElement('td');
+                let contesttd = document.createElement('td');
+                let idtd = document.createElement('td');
+                let amounttd = document.createElement('td');
+
+                gametd.innerText = game;
+                contesttd.innerText = contest;
+                idtd.innerText = id;
+                amounttd.innerText = amount;
+
+                newOutcome.appendChild(gametd);
+                newOutcome.appendChild(contesttd);
+                newOutcome.appendChild(idtd);
+                newOutcome.appendChild(amounttd);
+
+                outcomeList.appendChild(newOutcome);
+            // }
         }
         let popup = document.getElementById('popup');
         popup.classList.remove('open-popup');
