@@ -136,18 +136,18 @@
     </div>
 
     </div>
-    
+
 </body>
 
 <script>
     //TODO: fill ul #archivioVincite at startup by loading savedGames (+ get relevant data from it (extractionNo, numbers, winAmount))
-    if (!(localStorage.getItem("savedGames") === null)){
+    if (!(localStorage.getItem("savedGames") === null)) {
         const data = JSON.parse(localStorage.getItem("savedGames"));
         let outcomeList = document.getElementById('winArchive');
-        
-        for (let game of data){
+
+        for (let game of data) {
             let truegame = JSON.parse(game);
-            
+
             let gioco = truegame['gioco'];
             let contest = truegame['contest'];
             let id = truegame['idschedina'];
@@ -187,19 +187,19 @@
             if (localStorage.getItem("savedGames") === null) {
                 localStorage.setItem("savedGames", "[]");
             }
-            
+
             let currentSavedGames = JSON.parse(localStorage.getItem("savedGames"));
             let gameAlreadyScanned = false;
-            
-            for (let game of currentSavedGames){
+
+            for (let game of currentSavedGames) {
                 let truegame = JSON.parse(game);
                 if (truegame["idschedina"] == currentGame["idschedina"])
                     gameAlreadyScanned = true;
             }
 
-            // if (!gameAlreadyScanned){
+            if (!gameAlreadyScanned) {
                 currentSavedGames.push(currentGame);
-                
+
                 localStorage.setItem("savedGames", JSON.stringify(currentSavedGames));
                 let outcomeList = document.getElementById('winArchive');
 
@@ -227,7 +227,7 @@
                 newOutcome.appendChild(amounttd);
 
                 outcomeList.appendChild(newOutcome);
-            // }
+            }
         }
         let popup = document.getElementById('popup');
         popup.classList.remove('open-popup');
