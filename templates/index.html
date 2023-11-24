@@ -132,6 +132,7 @@
                     </tr>
                 </thead>
             </table>
+            <div class="btn btn-danger" id="clearWinArchive" onclick="clearArchive();">Svuota archivio</div>
         </div>
     </div>
 
@@ -140,7 +141,14 @@
 </body>
 
 <script>
-    //TODO: fill ul #archivioVincite at startup by loading savedGames (+ get relevant data from it (extractionNo, numbers, winAmount))
+    function clearArchive() {
+        let res = confirm("Sei sicuro di voler svuotare l'archivio?");
+        if (res) {
+            localStorage.setItem("savedGames", "[]");
+            location.reload();
+        }
+    }
+    //TODO: fix bug that lets user add same slip to archive more than once after clearing archive.
     if (!(localStorage.getItem("savedGames") === null)) {
         const data = JSON.parse(localStorage.getItem("savedGames"));
         let outcomeList = document.getElementById('winArchive');
