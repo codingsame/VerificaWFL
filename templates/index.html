@@ -122,8 +122,16 @@
     </div>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
-            <ul id="winArchive">
-            </ul>
+            <table id="winArchive">
+                <thead>
+                    <tr>
+                        <th>Tipologia Gioco</th>
+                        <th>Concorso</th>
+                        <th>Codice Schedina</th>
+                        <th>Vincita</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 
@@ -142,18 +150,39 @@
         aspectRatio: 1
     });
     let currentGame;
-    function closePopup(archiveOutcome) {
-        if (archiveOutcome) {
+    function closePopup(acceptSaveOutcome) {
+        if (acceptSaveOutcome) {
             if (localStorage.getItem("savedGames") === null) {
                 localStorage.setItem("savedGames", "[]");
             }
             let currentSavedGames = JSON.parse(localStorage.getItem("savedGames"));
             currentSavedGames.push(currentGame);
             localStorage.setItem("savedGames", JSON.stringify(currentSavedGames));
-
             let outcomeList = document.getElementById('winArchive');
-            let newOutcome = document.createElement('li');
-            newOutcome.innerText = currentGame;
+
+            let cg = JSON.parse(currentGame);
+
+            let game = cg['gioco'];
+            let contest = cg['contest'];
+            let id = cg['idschedina'];
+            let amount = cg['amount'];
+
+            let newOutcome = document.createElement('tr');
+            let gametd = document.createElement('td');
+            let contesttd = document.createElement('td');
+            let idtd = document.createElement('td');
+            let amounttd = document.createElement('td');
+
+            gametd.innerText = game;
+            contesttd.innerText = contest;
+            idtd.innerText = id;
+            amounttd.innerText = amount;
+
+            newOutcome.appendChild(gametd);
+            newOutcome.appendChild(contesttd);
+            newOutcome.appendChild(idtd);
+            newOutcome.appendChild(amounttd);
+
             outcomeList.appendChild(newOutcome);
         }
         let popup = document.getElementById('popup');
@@ -162,7 +191,6 @@
     }
     function showHidden() {
         document.getElementById('qrReader').hidden = false;
-        // document.getElementById('archiveToggle').hidden = false;
     }
 
 
@@ -173,8 +201,8 @@
         let path = '/checkwin'
         const url = new URL(res);
 
-        const y = url.searchParams.get('Y'); // => 'hello'
-        const c = url.searchParams.get('C'); // => null
+        const y = url.searchParams.get('Y');
+        const c = url.searchParams.get('C');
         const prsn = url.searchParams.get('PrSN');
         const gt = $("input[name='gametype']:checked").val();
 

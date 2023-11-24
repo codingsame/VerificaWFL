@@ -45,7 +45,7 @@ def calculate_win_amount(no, id, year, game):
         ween_type = ween["tipoDiVincita"]
         amount += int((int(ween_type["count"]) *
                       int(ween_type["valore"])) / 100)
-    return {'data': resp, 'amount': amount}
+    return {'contest': no, 'idschedina': id, 'gioco': game, 'amount': amount}
 
 
 app = Flask(__name__)
@@ -81,4 +81,4 @@ def winmessage():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(ssl_context="adhoc")
