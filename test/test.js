@@ -1182,8 +1182,7 @@ var __Html5QrcodeLibrary__;
                         return v(this, void 0, void 0, (function* () {
                             if (!this.hasNavigator) throw new Error("Can't enumerate devices, navigator is not present.");
                             if (!this.canEnumerateDevices) throw new Error("Can't enumerate devices, method not supported.");
-                            const t = yield navigator.mediaDevices.enumerateDevices(),
-                                e = [];
+                            const t = yield navigator.mediaDevices.enumerateDevices(), e = [];
                             for (const r of t) {
                                 const t = "video" === r.kind ? "videoinput" : r.kind;
                                 if ("videoinput" !== t) continue;
@@ -1877,8 +1876,7 @@ var __Html5QrcodeLibrary__;
                                     const r = i.multiply(e[t], s),
                                         n = 0 == (1 & r) ? 1 | r : -2 & r;
                                     a = i.multiply(a, n)
-                                }
-                            n[o] = i.multiply(t.evaluateAt(s), i.inverse(a)), 0 !== i.getGeneratorBase() && (n[o] = i.multiply(n[o], s))
+                                } n[o] = i.multiply(t.evaluateAt(s), i.inverse(a)), 0 !== i.getGeneratorBase() && (n[o] = i.multiply(n[o], s))
                         }
                         return n
                     }
@@ -1929,8 +1927,7 @@ var __Html5QrcodeLibrary__;
                                 o += s;
                                 let c = et.getCharacter(n, a);
                                 c.startsWith("CTRL_") ? (r = n, n = et.getTable(c.charAt(5)), "L" === c.charAt(6) && (r = n)) : (i += c, n = r)
-                            }
-                        return i
+                            } return i
                     }
                     static getTable(t) {
                         switch (t) {
@@ -2234,7 +2231,8 @@ var __Html5QrcodeLibrary__;
                                 if (i.get(n, r)) return !0
                         } else
                             for (let n = t; n <= e; n++)
-                                if (i.get(r, n)) return !0; return !1
+                                if (i.get(r, n)) return !0;
+                        return !1
                     }
                 }
                 at.INIT_SIZE = 10, at.CORR = 1;
@@ -2305,7 +2303,8 @@ var __Html5QrcodeLibrary__;
                     static squareToQuadrilateral(t, e, r, n, i, o, s, a) {
                         const c = t - r + i - s,
                             l = e - n + o - a;
-                        if (0 === c && 0 === l) return new lt(r - t, i - r, t, n - e, o - n, e, 0, 0, 1); {
+                        if (0 === c && 0 === l) return new lt(r - t, i - r, t, n - e, o - n, e, 0, 0, 1);
+                        {
                             const h = r - i,
                                 u = s - i,
                                 d = n - o,
@@ -2709,8 +2708,7 @@ var __Html5QrcodeLibrary__;
                                     o += i[0] + i[1], i = i.slice(2, i.length - 1), i[n - 1] = 0, i[n] = 0, n--
                                 } else n++;
                                 i[n] = 1, s = !s
-                            }
-                        throw new D
+                            } throw new D
                     }
                     static decodeCode(t, e, r) {
                         wt.recordPattern(t, r, e);
@@ -2901,8 +2899,7 @@ var __Html5QrcodeLibrary__;
                                     o += e[0] + e[1], e.copyWithin(0, 2, 2 + i - 1), e[i - 1] = 0, e[i] = 0, i--
                                 } else i++;
                                 e[i] = 1, s = !s
-                            }
-                        throw new D
+                            } throw new D
                     }
                     static toNarrowWidePattern(t) {
                         let e, r = t.length,
@@ -3068,8 +3065,7 @@ var __Html5QrcodeLibrary__;
                                     c += i[0] + i[1], d.arraycopy(i, 2, i, 0, a - 1), i[a - 1] = 0, i[a] = 0, a--
                                 } else a++;
                                 i[a] = 1, s = !s
-                            }
-                        throw new D
+                            } throw new D
                     }
                     static decodeDigit(t) {
                         let e = At.MAX_AVG_VARIANCE,
@@ -3150,8 +3146,7 @@ var __Html5QrcodeLibrary__;
                                     i[s - 1] = 0, i[s] = 0, s--
                                 } else s++;
                                 i[s] = 1, l = !l
-                            }
-                        throw new D
+                            } throw new D
                     }
                     static decodeDigit(t, e, r, n) {
                         this.recordPattern(t, r, e);
@@ -3344,8 +3339,7 @@ var __Html5QrcodeLibrary__;
                                 if (A.toString() === e) {
                                     t = !0;
                                     break
-                                }
-                            if (!t) throw new D
+                                } if (!t) throw new D
                         }
                         return p
                     }
@@ -4516,8 +4510,7 @@ var __Html5QrcodeLibrary__;
                                 if (t[n].getFinderPattern().getValue() != e[n]) {
                                     r = !1;
                                     break
-                                }
-                            if (r) return !0
+                                } if (r) return !0
                         }
                         return !1
                     }
@@ -4551,11 +4544,10 @@ var __Html5QrcodeLibrary__;
                                     if (n.equals(e)) {
                                         t = !0;
                                         break
+                                    } if (!t) {
+                                        e = !1;
+                                        break
                                     }
-                                if (!t) {
-                                    e = !1;
-                                    break
-                                }
                             }
                             if (e) return !0
                         }
@@ -4629,8 +4621,7 @@ var __Html5QrcodeLibrary__;
                                     s && ee.reverseCounters(n), l += n[0] + n[1], n[0] = n[2], n[1] = n[3], n[2] = 0, n[3] = 0, c--
                                 } else c++;
                                 n[c] = 1, a = !a
-                            }
-                        throw new D
+                            } throw new D
                     }
                     static reverseCounters(t) {
                         let e = t.length;
@@ -4702,8 +4693,7 @@ var __Html5QrcodeLibrary__;
                             if (ee.isNotA1left(e, r, n)) {
                                 let e = ee.WEIGHTS[u][2 * t + 1];
                                 g += c[t] * e
-                            }
-                        let w = f + g;
+                            } let w = f + g;
                         if (0 != (1 & d) || d > 13 || d < 4) throw new D;
                         let m = (13 - d) / 2,
                             p = ee.SYMBOL_WIDEST[m],
@@ -4835,8 +4825,7 @@ var __Html5QrcodeLibrary__;
                             if (n.getValue() === e.getValue()) {
                                 n.incrementCount(), r = !0;
                                 break
-                            }
-                        r || t.push(e)
+                            } r || t.push(e)
                     }
                     reset() {
                         this.possibleLeftPairs.length = 0, this.possibleRightPairs.length = 0
@@ -4949,8 +4938,7 @@ var __Html5QrcodeLibrary__;
                                     a += r[0] + r[1], r[0] = r[2], r[1] = r[3], r[2] = 0, r[3] = 0, s--
                                 } else s++;
                                 r[s] = 1, i = !i
-                            }
-                        throw new D
+                            } throw new D
                     }
                     parseFoundFinderPattern(t, e, r, n) {
                         let i = t.get(n[0]),
@@ -5366,7 +5354,8 @@ var __Html5QrcodeLibrary__;
                                     case 0:
                                         if (o < 3) i = o + 1;
                                         else {
-                                            if (!(o < this.C40_BASIC_SET_CHARS.length)) throw new E; {
+                                            if (!(o < this.C40_BASIC_SET_CHARS.length)) throw new E;
+                                            {
                                                 const t = this.C40_BASIC_SET_CHARS[o];
                                                 r ? (e.append(String.fromCharCode(t.charCodeAt(0) + 128)), r = !1) : e.append(t)
                                             }
@@ -5415,7 +5404,8 @@ var __Html5QrcodeLibrary__;
                                     case 0:
                                         if (o < 3) i = o + 1;
                                         else {
-                                            if (!(o < this.TEXT_BASIC_SET_CHARS.length)) throw new E; {
+                                            if (!(o < this.TEXT_BASIC_SET_CHARS.length)) throw new E;
+                                            {
                                                 const t = this.TEXT_BASIC_SET_CHARS[o];
                                                 r ? (e.append(String.fromCharCode(t.charCodeAt(0) + 128)), r = !1) : e.append(t)
                                             }
@@ -5441,7 +5431,8 @@ var __Html5QrcodeLibrary__;
                                         i = 0;
                                         break;
                                     case 3:
-                                        if (!(o < this.TEXT_SHIFT3_SET_CHARS.length)) throw new E; {
+                                        if (!(o < this.TEXT_SHIFT3_SET_CHARS.length)) throw new E;
+                                        {
                                             const t = this.TEXT_SHIFT3_SET_CHARS[o];
                                             r ? (e.append(String.fromCharCode(t.charCodeAt(0) + 128)), r = !1) : e.append(t), i = 0
                                         }
@@ -6576,8 +6567,7 @@ var __Html5QrcodeLibrary__;
                             if (e.getCount() >= be.CENTER_QUORUM) {
                                 if (null != t) return this.hasSkipped = !0, Math.floor((Math.abs(t.getX() - e.getX()) - Math.abs(t.getY() - e.getY())) / 2);
                                 t = e
-                            }
-                        return 0
+                            } return 0
                     }
                     haveMultiplyConfirmedCenters() {
                         let t = 0,
@@ -6943,8 +6933,7 @@ var __Html5QrcodeLibrary__;
                                     a += s[0] + s[1], d.arraycopy(s, 2, s, 0, h - 1), s[h - 1] = 0, s[h] = 0, h--
                                 } else h++;
                                 s[h] = 1, e = !e
-                            }
-                        return h === u - 1 && Fe.patternMatchVariance(s, o, Fe.MAX_INDIVIDUAL_VARIANCE) < Fe.MAX_AVG_VARIANCE ? new Int32Array([a, l - 1]) : null
+                            } return h === u - 1 && Fe.patternMatchVariance(s, o, Fe.MAX_INDIVIDUAL_VARIANCE) < Fe.MAX_AVG_VARIANCE ? new Int32Array([a, l - 1]) : null
                     }
                     static patternMatchVariance(t, e, r) {
                         let n = t.length,
@@ -7440,8 +7429,7 @@ var __Html5QrcodeLibrary__;
                                 let r = t.getRowNumber();
                                 if (r >= e.length) continue;
                                 e[r]++
-                            }
-                        return e
+                            } return e
                     }
                     adjustIncompleteIndicatorColumnRowNumbers(t) {
                         let e = this.getBoundingBox(),
@@ -8360,8 +8348,7 @@ var __Html5QrcodeLibrary__;
                                             if (n >= e.length) continue;
                                             e[n][r].setValue(t.getValue())
                                         }
-                                    }
-                            r++
+                                    } r++
                         }
                         return e
                     }
@@ -9249,8 +9236,7 @@ var __Html5QrcodeLibrary__;
                                 if (1 === i.get(r, t)) {
                                     const t = this.createSvgRectElement(n, e, u, u);
                                     g.appendChild(t)
-                                }
-                        return g
+                                } return g
                     }
                     createSVGElement(t, e) {
                         const r = document.createElementNS(Er.SVG_NS, "svg");
