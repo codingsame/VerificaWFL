@@ -150,7 +150,7 @@
             location.reload();
         }
     }
-    //TODO: fix bug that lets user add same slip to archive more than once after clearing archive.
+    //TODO: detect if extraction hasn't happened yet
     if (!(localStorage.getItem("savedGames") === null)) {
         let total = 0;
         const data = JSON.parse(localStorage.getItem("savedGames"));
