@@ -7,6 +7,13 @@ from data import headers
 
 from flask import Flask, request, render_template, redirect
 
+# TODO: Allow user to sign up for notification by scanning
+# slip (record extraction, send notification based on data)
+#
+# Strategy: get "dataEstrazione" from response to "make_api_request"
+# and wait for time to catch up. When time is reached, make new request
+# and push out notification.
+
 
 def parse_link(qr_link: str):
     parsed_url = urlparse(qr_link)
@@ -39,6 +46,7 @@ def make_api_request(contest_no: str, contest_year: str, contest_id: str, game: 
 def calculate_win_amount(no, id, year, game):
     amount = 0
     resp = make_api_request(no, year, id, game)
+    print(resp)
     d = json.loads(resp)
     unparsed_weens = d["vincita"]
     for ween in unparsed_weens:
