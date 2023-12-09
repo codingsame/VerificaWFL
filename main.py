@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 from random import randint
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
@@ -46,8 +47,12 @@ def make_api_request(contest_no: str, contest_year: str, contest_id: str, game: 
 def calculate_win_amount(no, id, year, game):
     amount = 0
     resp = make_api_request(no, year, id, game)
-    print(resp)
     d = json.loads(resp)
+    timestamp_concorso = float(d["concorso"]["dataEstrazione"])
+    timestamp_ora = datetime.now().timestamp()
+    print(f"Concorso: {timestamp_concorso}, ora: {timestamp_ora}")
+    if float(d["concorso"]["dataEstrazione"]) > datetime.now().timestamp() * 1000:
+        return {'contest': no, 'idschedina': id, 'gioco': game, 'amount': -1}
     unparsed_weens = d["vincita"]
     for ween in unparsed_weens:
         ween_type = ween["tipoDiVincita"]

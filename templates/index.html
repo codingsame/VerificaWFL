@@ -86,12 +86,13 @@
     <div class="flex-container">
         <div id="popup" class="popup">
             <img id="outcome" />
-            <h2 id="win-message">Hai vinto dosento mila euro</h2>
+            <h2 id="win-message"></h2>
             <p>Vuoi aggiungere questa schedina al tuo archivio?</p>
             <div class="flex-container-row">
-                <button type="button" class="btn btn-outline-success flex-fill"
+                <button id="addButton" type="button" class="btn btn-outline-success flex-fill"
                     onclick="closePopup(true);">Aggiungi</button>
-                <button type="button" class="btn btn-outline-primary" onclick="closePopup(false);">Prosegui</button>
+                <button id="skipButton" type="button" class="btn btn-outline-primary"
+                    onclick="closePopup(false);">Prosegui</button>
             </div>
         </div>
         <div class="container">
@@ -199,6 +200,8 @@
     let currentGame;
 
     function closePopup(acceptSaveOutcome) {
+        document.getElementById("addButton").hidden = false;
+        document.getElementById("skipButton").classList.remove("flex-fill");
         if (acceptSaveOutcome) {
             if (localStorage.getItem("savedGames") === null) {
                 localStorage.setItem("savedGames", "[]");
@@ -282,7 +285,13 @@
                 let msg_element = document.getElementById('win-message');
                 let popup = document.getElementById('popup');
                 let image = document.getElementById('outcome');
-                if (text['amount'] == 0) {
+                if (text['amount'] == -1) {
+                    winmsg = "Estrazione non ancora svolta.";
+                    image.src = "{{url_for('static', filename='question.png')}}"
+                    document.getElementById("addButton").hidden = true;
+                    document.getElementById("skipButton").classList.add("flex-fill")
+                }
+                else if (text['amount'] == 0) {
                     winmsg = "Schedina non vincente";
                     image.src = "{{url_for('static', filename='fail.png')}}"
                 }
