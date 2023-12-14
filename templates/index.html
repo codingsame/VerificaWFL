@@ -14,9 +14,30 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
+
+    <nav class="nav">
+        <a class="nav__link nav__link--active" onclick="setActive(this); showHidden()">
+            <i class="ri-money-euro-box-line"></i>
+            <span class="nav__text">Win For Life Classico</span>
+        </a>
+        <a class="nav__link nav__link" onclick="setActive(this)">
+            <i class="ri-building-4-line"></i>
+            <span class="nav__text">Win For Life Grattacieli</span>
+        </a>
+        <a class="nav__link" onclick="setActive(this)">
+            <i class="ri-home-6-line"></i>
+            <span class="nav__text">Vinci Casa</span>
+        </a>
+        <a href="#archive" class="nav__link" onclick="setActive(this)">
+            <i class="ri-wallet-3-line"></i>
+            <span class="nav__text">Archivio</span>
+        </a>
+
+    </nav>
     <div class="centered-text rounded">
         <h1 class="rounded" style="background-color: #007E47; color:white"> Verifica vincite Win For Life </h1>
     </div>
@@ -54,12 +75,12 @@
         </div>
     </div>
     <div class="flex-container flex-center">
-        <a id="archiveToggle" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
-            aria-expanded="false" aria-controls="collapseExample">
+        <a id="archiveToggle" class="btn btn-primary" data-bs-toggle="collapse" href="#archive" role="button"
+            aria-expanded="false" aria-controls="archive">
             Archivio vincite
         </a>
     </div>
-    <div class="collapse" id="collapseExample">
+    <div class="collapse" id="archive">
         <div class="card card-body">
             <table id="winArchive" class="table">
                 <thead>
@@ -80,8 +101,10 @@
 </body>
 
 <script>
+
     if (localStorage.getItem("savedGames") === null)
         document.getElementById('clearWinArchive').hidden = true;
+
     function clearArchive() {
         let res = confirm("Sei sicuro di voler svuotare l'archivio?");
         if (res) {
@@ -89,7 +112,7 @@
             location.reload();
         }
     }
-    //TODO: detect if extraction hasn't happened yet
+
     if (!(localStorage.getItem("savedGames") === null)) {
         let total = 0;
         const data = JSON.parse(localStorage.getItem("savedGames"));
@@ -192,6 +215,7 @@
         popup.classList.remove('open-popup');
         scanner.render(success, error);
     }
+
     function showHidden() {
         document.getElementById('qrReader').hidden = false;
     }
@@ -248,6 +272,11 @@
     function error(res) {
     }
 
+    function setActive(tab) {
+        let currentlyActive = document.getElementsByClassName("nav__link--active");
+        currentlyActive[0].classList.remove("nav__link--active");
+        tab.classList.add("nav__link--active");
+    }
 </script>
 
 </html>
