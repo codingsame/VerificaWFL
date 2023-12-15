@@ -1,3 +1,12 @@
+const scanner = new Html5QrcodeScanner('reader', {
+    qrbox: {
+        height: 250,
+        width: 250
+    },
+    fps: 20,
+    aspectRatio: 1
+});
+
 function initializeArchive() {
     let total = 0;
     const data = JSON.parse(localStorage.getItem("savedGames"));
@@ -101,6 +110,8 @@ function closePopup(acceptSaveOutcome) {
 }
 
 function showHidden() {
+    
+    scanner.render(success, error);
     document.getElementById('qrReader').hidden = false;
 }
 function success(res) {
@@ -111,7 +122,7 @@ function success(res) {
     const c = url.searchParams.get('C');
     const prsn = url.searchParams.get('PrSN');
     const gt = document.getElementsByClassName("nav__link--active")[0].innerText;
-    console.log(gt);
+    // TODO: Implement way of getting correct string to send out to API out of currently active nav link
 
     $.ajax({
         type: 'POST',
