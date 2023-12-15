@@ -19,28 +19,7 @@
 
 <body>
 
-    <nav class="nav">
-        <a class="nav__link nav__link--active" onclick="setActive(this); showHidden()">
-            <i class="ri-money-euro-box-line"></i>
-            <span class="nav__text">Classico</span>
-        </a>
-
-        <a class="nav__link nav__link" onclick="setActive(this)">
-            <i class="ri-building-4-line"></i>
-            <span class="nav__text">Grattacieli</span>
-        </a>
-
-        <a class="nav__link" onclick="setActive(this)">
-            <i class="ri-home-6-line"></i>
-            <span class="nav__text">Vinci Casa</span>
-        </a>
-
-        <a href="#archive" class="nav__link" onclick="setActive(this)">
-            <i class="ri-wallet-3-line"></i>
-            <span class="nav__text">Archivio</span>
-        </a>
-
-    </nav>
+    
     <div class="centered-text rounded">
         <h1 class="rounded" style="background-color: #007E47; color:white"> Verifica vincite Win For Life </h1>
     </div>
@@ -58,19 +37,6 @@
             </div>
         </div>
         <div class="container">
-
-            <div class="flex-container-row rounded flex-center" style="background-color: white;">
-
-                <input type="radio" class="btn-check rounded" name="gametype" id="classico-check" value='classico'
-                    onclick="showHidden();">
-                <label class="btn btn-outline-success rounded" for="classico-check">Win For Life
-                    Classico</label>
-
-                <input type="radio" class="btn-check" name="gametype" id="grattacieli-check" value="grattacieli"
-                    onclick="showHidden();">
-                <label class="btn btn-outline-success" for="grattacieli-check">Win For Life Grattacieli</label>
-
-            </div>
             <main class="rounded readerSize" id="qrReader" hidden>
                 <div id="reader" class="rounded"></div>
                 <div id="result"></div>
@@ -100,6 +66,28 @@
         </div>
     </div>
     </div>
+    <nav class="nav">
+        <a class="nav__link" onclick="setActive(this); showHidden()">
+            <i class="ri-money-euro-box-line"></i>
+            <span class="nav__text">Classico</span>
+        </a>
+
+        <a class="nav__link nav__link" onclick="setActive(this); showHidden()">
+            <i class="ri-building-4-line"></i>
+            <span class="nav__text">Grattacieli</span>
+        </a>
+
+        <a class="nav__link" onclick="setActive(this); showHidden()">
+            <i class="ri-home-6-line"></i>
+            <span class="nav__text">Vinci Casa</span>
+        </a>
+
+        <a href="archive.html" class="nav__link">
+            <i class="ri-wallet-3-line"></i>
+            <span class="nav__text">Archivio</span>
+        </a>
+
+    </nav>
 
 </body>
 <script src="{{url_for('static', filename='script.js')}}"></script>

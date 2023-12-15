@@ -105,13 +105,13 @@ function showHidden() {
 }
 function success(res) {
     scanner.clear();
-    let path = '/checkwin'
     const url = new URL(res);
 
     const y = url.searchParams.get('Y');
     const c = url.searchParams.get('C');
     const prsn = url.searchParams.get('PrSN');
-    const gt = $("input[name='gametype']:checked").val();
+    const gt = document.getElementsByClassName("nav__link--active")[0].innerText;
+    console.log(gt);
 
     $.ajax({
         type: 'POST',
@@ -122,28 +122,28 @@ function success(res) {
             'PrSN': prsn,
             'game_type': gt
         },
-        success: function (text) {
+        success: function (resp) {
             let winmsg;
             let msg_element = document.getElementById('win-message');
             let popup = document.getElementById('popup');
             let image = document.getElementById('outcome');
-            if (text['amount'] == -1) {
+            if (resp['amount'] == -1) {
                 winmsg = "Estrazione non ancora svolta.";
                 image.src = "{{url_for('static', filename='question.png')}}"
                 document.getElementById("addButton").hidden = true;
                 document.getElementById("skipButton").classList.add("flex-fill")
             }
-            else if (text['amount'] == 0) {
+            else if (resp['amount'] == 0) {
                 winmsg = "Schedina non vincente";
                 image.src = "{{url_for('static', filename='fail.png')}}"
             }
             else {
-                winmsg = "Hai vinto " + text['amount'] + "€.";
+                winmsg = "Hai vinto " + resp['amount'] + "€.";
                 image.src = "{{url_for('static', filename='tick.png')}}"
             }
             msg_element.innerText = winmsg;
             popup.classList.add('open-popup');
-            currentGame = JSON.stringify(text);
+            currentGame = JSON.stringify(resp);
         }
     }
     )
@@ -154,6 +154,7 @@ function error(res) {
 
 function setActive(tab) {
     let currentlyActive = document.getElementsByClassName("nav__link--active");
-    currentlyActive[0].classList.remove("nav__link--active");
+    if (currentlyActive[0])
+        currentlyActive[0].classList.remove("nav__link--active");
     tab.classList.add("nav__link--active");
 }
