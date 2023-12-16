@@ -1,3 +1,4 @@
+const dict = {"Classico": "classico", "Grattacieli": "grattacieli", "Vinci Casa": ""}
 const scanner = new Html5QrcodeScanner('reader', {
     qrbox: {
         height: 250,
@@ -110,11 +111,17 @@ function closePopup(acceptSaveOutcome) {
 }
 
 function showHidden() {
-    
-    scanner.render(success, error);
+    try{
+        scanner.getState() 
+    }
+    catch{
+        scanner.render(success, error);
+    }
     document.getElementById('qrReader').hidden = false;
 }
+
 function success(res) {
+    // Should test: call scanner.pause() on success for dramatic effect 8)
     scanner.clear();
     const url = new URL(res);
 
