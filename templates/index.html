@@ -43,13 +43,7 @@
             </main>
         </div>
     </div>
-    <div class="flex-container flex-center">
-        <a id="archiveToggle" class="btn btn-primary" data-bs-toggle="collapse" href="#archive" role="button"
-            aria-expanded="false" aria-controls="archive">
-            Archivio vincite
-        </a>
-    </div>
-    <div class="collapse" id="archive">
+    <div class="popupArchive" id="archive">
         <div class="card card-body">
             <table id="winArchive" class="table">
                 <thead>
@@ -84,7 +78,7 @@
         
         <!-- TODO: Make archive pop out from nav link. Clean Bottom to top animation, reversed when clicking again.
         button has to change color when active.-->
-        <a href="archive.html" class="nav__link">
+        <a id="archiveButton" class="nav__link" onclick="toggleArchive()">
             <i class="ri-wallet-3-line"></i>
             <span class="nav__text">Archivio</span>
         </a>

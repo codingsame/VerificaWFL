@@ -118,6 +118,11 @@ function showHidden() {
         scanner.render(success, error);
     }
     document.getElementById('qrReader').hidden = false;
+    const archiveButton = document.getElementById("archiveButton");
+    if (archiveButton.classList.contains("activeArchive")){
+        archiveButton.classList.remove("activeArchive");
+        archive.classList.remove("open-popup");
+    }
 }
 
 function success(res) {
@@ -175,4 +180,18 @@ function setActive(tab) {
     if (currentlyActive[0])
         currentlyActive[0].classList.remove("nav__link--active");
     tab.classList.add("nav__link--active");
+}
+
+function toggleArchive(){
+    let archiveButton = document.getElementById("archiveButton");
+    let archive = document.getElementById("archive");
+
+    if (archiveButton.classList.contains("activeArchive")){
+        archiveButton.classList.remove("activeArchive");
+        archive.classList.remove("open-popup")
+    }
+    else{
+        archiveButton.classList.add("activeArchive");
+        archive.classList.add("open-popup");
+    }
 }
