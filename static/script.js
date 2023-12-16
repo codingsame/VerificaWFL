@@ -8,6 +8,15 @@ const scanner = new Html5QrcodeScanner('reader', {
     aspectRatio: 1
 });
 
+function isScannerOn(){
+    try {
+        scanner.getState();
+        return true;
+    }
+    catch {
+        return false;
+    }
+}
 function initializeArchive() {
     let total = 0;
     const data = JSON.parse(localStorage.getItem("savedGames"));
@@ -111,12 +120,9 @@ function closePopup(acceptSaveOutcome) {
 }
 
 function showHidden() {
-    try{
-        scanner.getState() 
-    }
-    catch{
+    if (!isScannerOn())
         scanner.render(success, error);
-    }
+    
     document.getElementById('qrReader').hidden = false;
     const archiveButton = document.getElementById("archiveButton");
     if (archiveButton.classList.contains("activeArchive")){
@@ -183,15 +189,17 @@ function setActive(tab) {
 }
 
 function toggleArchive(){
-    let archiveButton = document.getElementById("archiveButton");
-    let archive = document.getElementById("archive");
+    if (!isScannerOn() || isScannerOn() && scanner.getState() != 2){
+        let archiveButton = document.getElementById("archiveButton");
+        let archive = document.getElementById("archive");
 
-    if (archiveButton.classList.contains("activeArchive")){
-        archiveButton.classList.remove("activeArchive");
-        archive.classList.remove("open-popup")
-    }
-    else{
-        archiveButton.classList.add("activeArchive");
-        archive.classList.add("open-popup");
+        if (archiveButton.classList.contains("activeArchive")){
+            archiveButton.classList.remove("activeArchive");
+            archive.classList.remove("open-popup")
+        }
+        else{
+            archiveButton.classList.add("activeArchive");
+            archive.classList.add("open-popup");
+        }
     }
 }

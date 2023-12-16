@@ -58,8 +58,8 @@
     background: #ddd;
     border-radius: 6px;
     position: absolute;
-    top: 98%;
-    left: 98%;
+    top: 90%;
+    left: 90%;
     transform: translate(-50%, -50%) scale(0.1);
     text-align: center;
     padding: 0 30px 30px;
@@ -71,6 +71,7 @@
 
 .open-popup {
     visibility: visible;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
@@ -97,7 +98,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    /* min-width: 50px; */
+    min-width: 50px;
     overflow: hidden;
     white-space: nowrap;
     font-family: sans-serif;
@@ -109,7 +110,7 @@ body {
 }
 
 .nav__link:hover {
-    background-color: #ddd;
+    background-color: #fff;
 }
 
 .nav__link--active {
