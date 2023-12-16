@@ -120,15 +120,15 @@ function closePopup(acceptSaveOutcome) {
 }
 
 function showHidden() {
-    if (!isScannerOn())
-        scanner.render(success, error);
-    
-    document.getElementById('qrReader').hidden = false;
     const archiveButton = document.getElementById("archiveButton");
     if (archiveButton.classList.contains("activeArchive")){
         archiveButton.classList.remove("activeArchive");
         archive.classList.remove("open-popup");
     }
+    if (!isScannerOn())
+        scanner.render(success, error);
+    document.getElementById('qrReader').hidden = false;
+    
 }
 
 function success(res) {
@@ -189,17 +189,24 @@ function setActive(tab) {
 }
 
 function toggleArchive(){
-    if (!isScannerOn() || isScannerOn() && scanner.getState() != 2){
-        let archiveButton = document.getElementById("archiveButton");
-        let archive = document.getElementById("archive");
-
-        if (archiveButton.classList.contains("activeArchive")){
-            archiveButton.classList.remove("activeArchive");
-            archive.classList.remove("open-popup")
-        }
-        else{
+    if (archiveButton.classList.contains("activeArchive")){
+        archiveButton.classList.remove("activeArchive");
+        archive.classList.remove("open-popup")
+    }
+    else{
+        if (!isScannerOn() || isScannerOn() && scanner.getState() != 2){
+            let archive = document.getElementById("archive");
+            let archiveButton = document.getElementById("archiveButton");
             archiveButton.classList.add("activeArchive");
             archive.classList.add("open-popup");
         }
+        if (isScannerOn() && scanner.getState() == 2){
+            if (archiveButton)
+            spawnSoftAlert("Per visualizzare l'archivio occorre interrompere la scansione.")
+        }
     }
+}
+
+function spawnSoftAlert(msg){
+    alert(msg);
 }
