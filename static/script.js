@@ -1,4 +1,4 @@
-const dict = {"Classico": "classico", "Grattacieli": "grattacieli", "Vinci Casa": ""}
+const dict = { "Classico": "classico", "Grattacieli": "grattacieli", "Vinci Casa": "" }
 const scanner = new Html5QrcodeScanner('reader', {
     qrbox: {
         height: 250,
@@ -8,7 +8,7 @@ const scanner = new Html5QrcodeScanner('reader', {
     aspectRatio: 1
 });
 
-function isScannerOn(){
+function isScannerOn() {
     try {
         scanner.getState();
         return true;
@@ -51,7 +51,7 @@ function initializeArchive() {
         total += amount;
     }
     let winTotal = document.getElementById('winTotal')
-    winTotal.innerText = `Vincita totale: ${total}`;
+    winTotal.innerText = `Vincita totale: ${total.toFixed(2)}€`;
     winTotal.hidden = false;
 }
 
@@ -113,6 +113,7 @@ function closePopup(acceptSaveOutcome) {
         let clearButton = document.getElementById('clearWinArchive')
         if (clearButton.hidden == true)
             clearButton.hidden = false;
+        document.getElementById("winTotal").hidden = false;
     }
     let popup = document.getElementById('popup');
     popup.classList.remove('open-popup');
@@ -121,25 +122,25 @@ function closePopup(acceptSaveOutcome) {
 
 function showHidden() {
     const archiveButton = document.getElementById("archiveButton");
-    if (archiveButton.classList.contains("activeArchive")){
+    if (archiveButton.classList.contains("activeArchive")) {
         archiveButton.classList.remove("activeArchive");
         archive.classList.remove("open-popup");
     }
     if (!isScannerOn())
         scanner.render(success, error);
     document.getElementById('qrReader').hidden = false;
-    
+
 }
 
 function success(res) {
-    // Should test: call scanner.pause() on success for dramatic effect 8)
     scanner.clear();
     const url = new URL(res);
 
     const y = url.searchParams.get('Y');
     const c = url.searchParams.get('C');
     const prsn = url.searchParams.get('PrSN');
-    const gt = document.getElementsByClassName("nav__link--active")[0].innerText;
+    const gt = dict[document.getElementsByClassName("nav__link--active")[0].innerText];
+    console.log(gt);
     // TODO: Implement way of getting correct string to send out to API out of currently active nav link
 
     $.ajax({
@@ -158,17 +159,17 @@ function success(res) {
             let image = document.getElementById('outcome');
             if (resp['amount'] == -1) {
                 winmsg = "Estrazione non ancora svolta.";
-                image.src = "{{url_for('static', filename='question.png')}}"
+                image.src = `${window.static_folder}/question.png`
                 document.getElementById("addButton").hidden = true;
                 document.getElementById("skipButton").classList.add("flex-fill")
             }
             else if (resp['amount'] == 0) {
                 winmsg = "Schedina non vincente";
-                image.src = "{{url_for('static', filename='fail.png')}}"
+                image.src = `${window.static_folder}/fail.png`
             }
             else {
                 winmsg = "Hai vinto " + resp['amount'] + "€.";
-                image.src = "{{url_for('static', filename='tick.png')}}"
+                image.src = `${window.static_folder}/tick.png`
             }
             msg_element.innerText = winmsg;
             popup.classList.add('open-popup');
@@ -188,25 +189,24 @@ function setActive(tab) {
     tab.classList.add("nav__link--active");
 }
 
-function toggleArchive(){
-    if (archiveButton.classList.contains("activeArchive")){
+function toggleArchive() {
+    if (archiveButton.classList.contains("activeArchive")) {
         archiveButton.classList.remove("activeArchive");
         archive.classList.remove("open-popup")
     }
-    else{
-        if (!isScannerOn() || isScannerOn() && scanner.getState() != 2){
+    else {
+        if (!isScannerOn() || isScannerOn() && scanner.getState() != 2) {
             let archive = document.getElementById("archive");
             let archiveButton = document.getElementById("archiveButton");
             archiveButton.classList.add("activeArchive");
             archive.classList.add("open-popup");
         }
-        if (isScannerOn() && scanner.getState() == 2){
-            if (archiveButton)
-            spawnSoftAlert("Per visualizzare l'archivio occorre interrompere la scansione.")
+        if (isScannerOn() && scanner.getState() == 2) {
+            if (archiveButton) {
+                scanner.pause();
+                alert("Per visualizzare l'archivio occorre interrompere la scansione.");
+                scanner.resume();
+            }
         }
     }
-}
-
-function spawnSoftAlert(msg){
-    alert(msg);
 }

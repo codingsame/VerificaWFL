@@ -19,7 +19,7 @@
 
 <body>
 
-    
+
     <div class="centered-text rounded">
         <h1 class="rounded" style="background-color: #007E47; color:white"> Verifica vincite Win For Life </h1>
     </div>
@@ -75,8 +75,8 @@
             <i class="ri-home-6-line"></i>
             <span class="nav__text">Vinci Casa</span>
         </a>
-        
-        
+
+
         <a id="archiveButton" class="nav__link" onclick="toggleArchive()">
             <i class="ri-wallet-3-line"></i>
             <span class="nav__text">Archivio</span>
@@ -85,17 +85,20 @@
     </nav>
 
 </body>
+<script>
+    window.static_folder = "{{ url_for('static', filename="") }}";
+</script>
 <script src="{{url_for('static', filename='script.js')}}"></script>
 <script>
-    if (localStorage.getItem("savedGames") === null)
+    let savedGames = localStorage.getItem("savedGames");
+    if (savedGames === null || savedGames === '[]')
         document.getElementById('clearWinArchive').hidden = true;
-
-    if (!(localStorage.getItem("savedGames") === null))
+    else
         initializeArchive();
 
-    
+
     let currentGame;
-    
+
 </script>
 
 </html>
