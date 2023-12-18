@@ -54,6 +54,7 @@
     cursor: pointer;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 }
+
 .popupArchive {
     background: #ddd;
     border-radius: 6px;
@@ -67,6 +68,11 @@
     visibility: hidden;
     transition: 0.4s, top 0.4s;
     z-index: 100;
+}
+
+.forcesize {
+    width: 500px !important;
+    height: 500px !important;
 }
 
 .open-popup {
@@ -124,4 +130,3 @@ body {
 .activeArchive {
     color: #009578;
 }
-

@@ -1,5 +1,5 @@
-// TODO: Make adding game to archive update "TOTAL WIN" message on the fly.
-const dict = { "Classico": "winforlife/classico", "Grattacieli": "winforlife/grattacieli", "Vinci Casa": "vincicasa" }
+const dict = { "Classico": "winforlifeclassico", "Grattacieli": "winforlifegrattacieli", "Vinci Casa": "vincicasa" }
+
 const scanner = new Html5QrcodeScanner('reader', {
     qrbox: {
         height: 250,
@@ -42,6 +42,10 @@ function addCardToArchive(card, archive) {
     let amount = card['amount'];
 
     let newOutcome = document.createElement('tr');
+    if (amount > 0)
+        newOutcome.classList.add("bg-success")
+    else
+        newOutcome.classList.add("bg-danger")
     let gametd = document.createElement('td');
     let contesttd = document.createElement('td');
     let idtd = document.createElement('td');
