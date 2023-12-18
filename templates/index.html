@@ -86,7 +86,7 @@
 
 </body>
 <script>
-    window.static_folder = "{{ url_for('static', filename="") }}";
+    window.static_folder = "{{ url_for('static', filename='') }}";
 </script>
 <script src="{{url_for('static', filename='script.js')}}"></script>
 <script>

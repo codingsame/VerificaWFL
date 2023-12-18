@@ -1,4 +1,4 @@
-// TODO: Make adding game to archive update "TOTAL WIN" message.
+// TODO: Make adding game to archive update "TOTAL WIN" message on the fly.
 const dict = { "Classico": "winforlife/classico", "Grattacieli": "winforlife/grattacieli", "Vinci Casa": "vincicasa" }
 const scanner = new Html5QrcodeScanner('reader', {
     qrbox: {
@@ -18,6 +18,54 @@ function isScannerOn() {
         return false;
     }
 }
+
+/**
+ * @typedef {Object} Card
+ * @property {"classico" | "grattacieli" | "vincicasa"} gioco     - Can assume values: {'classico', 'grattacieli', 'vincicasa'} 
+ * @property {String} contest   - Contest number for game
+ * @property {String} id        - Indicates identification for specific card
+ * @property {string} amount    - Indicates amount won.
+ * Represents a game card.
+ */
+
+/**
+ * 
+ * @param {Card} card
+ * @param {HTMLTableElement} archive 
+ * Adds a card to the archive.
+ * Parameter archive is altered by this operation (new row is added to it.)
+ */
+function addCardToArchive(card, archive) {
+    let gioco = card['gioco'];
+    let contest = card['contest'];
+    let id = card['idschedina'];
+    let amount = card['amount'];
+
+    let newOutcome = document.createElement('tr');
+    let gametd = document.createElement('td');
+    let contesttd = document.createElement('td');
+    let idtd = document.createElement('td');
+    let amounttd = document.createElement('td');
+
+    gametd.innerText = gioco;
+    contesttd.innerText = contest;
+    idtd.innerText = id;
+    amounttd.innerText = amount;
+
+    newOutcome.appendChild(gametd);
+    newOutcome.appendChild(contesttd);
+    newOutcome.appendChild(idtd);
+    newOutcome.appendChild(amounttd);
+
+    archive.appendChild(newOutcome)
+}
+
+/**
+ * Iterates through savedGames in localStorage and adds all records
+ * to the archive. This function is called at startup to load all 
+ * previous games. Each game is converted to JSON before being 
+ * added to the archive.
+ */
 function initializeArchive() {
     let total = 0;
     const data = JSON.parse(localStorage.getItem("savedGames"));
@@ -26,30 +74,9 @@ function initializeArchive() {
     for (let game of data) {
         let truegame = JSON.parse(game);
 
-        let gioco = truegame['gioco'];
-        let contest = truegame['contest'];
-        let id = truegame['idschedina'];
-        let amount = truegame['amount'];
+        addCardToArchive(truegame, outcomeList);
 
-        let newOutcome = document.createElement('tr');
-        let gametd = document.createElement('td');
-        let contesttd = document.createElement('td');
-        let idtd = document.createElement('td');
-        let amounttd = document.createElement('td');
-
-        gametd.innerText = gioco;
-        contesttd.innerText = contest;
-        idtd.innerText = id;
-        amounttd.innerText = amount;
-
-        newOutcome.appendChild(gametd);
-        newOutcome.appendChild(contesttd);
-        newOutcome.appendChild(idtd);
-        newOutcome.appendChild(amounttd);
-
-        outcomeList.appendChild(newOutcome);
-
-        total += amount;
+        total += truegame['amount'];
     }
     let winTotal = document.getElementById('winTotal')
     winTotal.innerText = `Vincita totale: ${total.toFixed(2)}€`;
@@ -88,28 +115,7 @@ function closePopup(acceptSaveOutcome) {
 
             let cg = JSON.parse(currentGame);
 
-            let game = cg['gioco'];
-            let contest = cg['contest'];
-            let id = cg['idschedina'];
-            let amount = cg['amount'];
-
-            let newOutcome = document.createElement('tr');
-            let gametd = document.createElement('td');
-            let contesttd = document.createElement('td');
-            let idtd = document.createElement('td');
-            let amounttd = document.createElement('td');
-
-            gametd.innerText = game;
-            contesttd.innerText = contest;
-            idtd.innerText = id;
-            amounttd.innerText = amount;
-
-            newOutcome.appendChild(gametd);
-            newOutcome.appendChild(contesttd);
-            newOutcome.appendChild(idtd);
-            newOutcome.appendChild(amounttd);
-
-            outcomeList.appendChild(newOutcome);
+            addCardToArchive(cg, outcomeList);
         }
         let clearButton = document.getElementById('clearWinArchive')
         if (clearButton.hidden == true)
@@ -141,8 +147,6 @@ function success(res) {
     const c = url.searchParams.get('C');
     const prsn = url.searchParams.get('PrSN');
     const gt = dict[document.getElementsByClassName("nav__link--active")[0].innerText];
-    console.log(gt);
-    // TODO: Implement way of getting correct string to send out to API out of currently active nav link
 
     $.ajax({
         type: 'POST',
