@@ -1,4 +1,5 @@
-const dict = { "Classico": "classico", "Grattacieli": "grattacieli", "Vinci Casa": "" }
+// TODO: Make adding game to archive update "TOTAL WIN" message.
+const dict = { "Classico": "winforlife/classico", "Grattacieli": "winforlife/grattacieli", "Vinci Casa": "vincicasa" }
 const scanner = new Html5QrcodeScanner('reader', {
     qrbox: {
         height: 250,

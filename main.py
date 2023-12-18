@@ -24,7 +24,7 @@ def make_api_request(contest_no: str, contest_year: str, contest_id: str, game: 
     """
     Returns response given by lottery API.
     """
-    url = 'https://www.gntn-pgd.it/gntn-info-verifica-schedina-nlp/rest/fe/winforlife' + game
+    url = 'https://www.gntn-pgd.it/gntn-info-verifica-schedina-nlp/rest/fe/' + game
 
     json_data = {
         'concorso': {
@@ -62,8 +62,8 @@ def calculate_win_amount(no: str, game_id: str, year: str, game: str) -> dict[st
     unparsed_weens = d["vincita"]
     for ween in unparsed_weens:
         ween_type = ween["tipoDiVincita"]
-        amount += int((int(ween_type["count"]) *
-                      int(ween_type["valore"])) / 100)
+        amount += float((float(ween_type["count"]) *
+                      float(ween_type["valore"])) / 100)
     return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': amount}
 
 
