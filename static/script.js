@@ -65,14 +65,12 @@ function addCardToArchive(card, archive) {
  * Parses all amounts from table, sums them and updates total amount.
  */
 function updateTotalAmount() {
-    let total = 0.00;
+    let total = 0;
     let winnings = document.getElementsByClassName('amount');
-    for (let winning of winnings) {
-        console.log(winning);
-        total += parseFloat(winning.innerText);
-    }
+    for (let winning of winnings)
+        total += parseFloat(winning.innerHTML);
     let winTotal = document.getElementById('winTotal')
-    winTotal.innerText = `Vincita totale: ${total.toFixed()}€`;
+    winTotal.innerText = `Vincita totale: ${total.toFixed(2)}€`;
     winTotal.hidden = false;
 }
 
@@ -127,6 +125,7 @@ function closePopup(acceptSaveOutcome) {
             let cg = JSON.parse(currentGame);
 
             addCardToArchive(cg, outcomeList);
+            updateTotalAmount();
         }
         let clearButton = document.getElementById('clearWinArchive')
         if (clearButton.hidden == true)

@@ -33,14 +33,12 @@ def make_api_request(contest_no: str, contest_year: str, contest_id: str, game: 
         },
         'sn': contest_id
     }
-    print(f"DATA: {json_data}")
     response = requests.post(
         url,
         headers=headers,
         json=json_data,
         timeout=10
     )
-    print(f"RESPONSE: {response.text}")
     return response.text
 
 
@@ -53,7 +51,6 @@ def calculate_win_amount(no: str, game_id: str, year: str, game: str) -> dict[st
     """
     amount = 0
     resp = make_api_request(no, year, game_id, game)
-    print(resp)
     d = json.loads(resp)
     timestamp_concorso = float(d["concorso"]["dataEstrazione"])
     timestamp_ora = datetime.now().timestamp()
