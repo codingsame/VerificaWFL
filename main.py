@@ -17,9 +17,9 @@ def detect_game(year: str, card_id: str) -> Literal["classico", "grattacieli", "
     is valid for.
     """
     games = {
-        'se': "SuperEnalotto",
-        'svt': "SiVinceTutto",
-        'ej': "EuroJackpot",
+        'se': "superenalotto",
+        'svt': "sivincetutto",
+        'ej': "eurojackpot",
         'wflvc': "vincicasa",
         'wfl': "winforlifeclassico",
         'wflgr': "winforlifegrattacieli"
@@ -59,13 +59,9 @@ def detect_game(year: str, card_id: str) -> Literal["classico", "grattacieli", "
 
     annoult = year[2:]
 
-    for siglagioco in ['se', 'svt', 'ej', 'wflvc', 'wfl', 'wflgr']:
-        first = _[siglagioco] - 5
-        second = b[siglagioco] - 5
-        third = m[siglagioco]
-        fourth = p[siglagioco]
-        regex_string = r'^' + re.escape(annoult) + r'(\w{' + re.escape(str(first)) + r'}|\w{' + re.escape(
-            str(second)) + r'})(' + re.escape(third) + r'|' + re.escape(fourth) + r')(\w{1})$'
+    for siglagioco in ['svt', 'ej', 'wflvc', 'wfl', 'wflgr']:
+        regex_string = r'^' + re.escape(annoult) + r'(\w{' + re.escape(str(_[siglagioco]-5)) + r'}|\w{' + re.escape(
+            str(b[siglagioco]-5)) + r'})(' + re.escape(m[siglagioco]) + r'|' + re.escape(p[siglagioco]) + r')(\w{1})$'
         if re.match(regex_string, card_id):
             return games[siglagioco]
     return None
