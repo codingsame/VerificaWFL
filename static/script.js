@@ -160,7 +160,7 @@ function success(res) {
     const y = url.searchParams.get('Y');
     const c = url.searchParams.get('C');
     const prsn = url.searchParams.get('PrSN');
-    const gt = dict[document.getElementsByClassName("nav__link--active")[0].innerText];
+    // const gt = dict[document.getElementsByClassName("nav__link--active")[0].innerText];
 
     $.ajax({
         type: 'POST',
@@ -169,14 +169,17 @@ function success(res) {
             'Y': y,
             'C': c,
             'PrSN': prsn,
-            'game_type': gt
+            // 'game_type': gt
         },
         success: function (resp) {
             let winmsg;
             let msg_element = document.getElementById('win-message');
             let popup = document.getElementById('popup');
             let image = document.getElementById('outcome');
-            if (resp['amount'] == -1) {
+            if (resp['amount'] == -2) {
+                // TODO: Aggiungere codice che gestisca "Gioco non supportato".    
+            }
+            else if (resp['amount'] == -1) {
                 winmsg = "Estrazione non ancora svolta.";
                 image.src = `${window.static_folder}/question.png`
                 document.getElementById("addButton").hidden = true;
