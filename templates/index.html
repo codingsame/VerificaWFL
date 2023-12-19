@@ -39,26 +39,27 @@
         </div>
         <div class="container">
             <main class="rounded readerSize" id="qrReader" hidden>
-                <div id="reader" class="rounded forcesize"></div>
+                <div id="reader" class="rounded"></div>
                 <div id="result"></div>
             </main>
         </div>
     </div>
-    <div class="popupArchive" id="archive">
-        <div class="card card-body">
-            <table id="winArchive" class="table">
-                <thead>
-                    <tr>
-                        <th>Gioco</th>
-                        <th>Concorso</th>
-                        <th>Codice</th>
-                        <th>Vincita</th>
-                    </tr>
-                </thead>
-            </table>
-            <h1 id="winTotal" hidden>Vincita totale: </h1>
-            <div class="btn btn-danger" id="clearWinArchive" onclick="clearArchive();">Svuota archivio</div>
-        </div>
+    <div class="popupArchive card card-body" id="archive">
+        <table class="table" style="overflow-x: auto;">
+            <thead>
+                <tr>
+                    <th scope="col">Gioco</th>
+                    <th scope="col">Concorso</th>
+                    <th scope="col">Codice</th>
+                    <th scope="col">Vincita</th>
+                </tr>
+            </thead>
+            <tbody id="winArchive">
+
+            </tbody>
+        </table>
+        <h1 id="winTotal" hidden>Vincita totale: </h1>
+        <div class="btn btn-danger" id="clearWinArchive" onclick="clearArchive();">Svuota archivio</div>
     </div>
     </div>
     <nav class="nav">
@@ -81,8 +82,9 @@
 <script src="{{url_for('static', filename='script.js')}}"></script>
 <script>
     let savedGames = localStorage.getItem("savedGames");
-    if (savedGames === null || savedGames === '[]')
+    if (savedGames === null || savedGames === '[]') {
         document.getElementById('clearWinArchive').hidden = true;
+    }
     else
         initializeArchive();
 

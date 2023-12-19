@@ -1,5 +1,5 @@
-const dict = { "Classico": "winforlifeclassico", "Grattacieli": "winforlifegrattacieli", "Vinci Casa": "vincicasa" }
-
+const dict = { "winforlifeclassico": "Classico", "winforlifegrattacieli": "Grattacieli", "vincicasa": "VinciCasa", "sivincetutto": "SiVinceTutto" }
+let archiveClickable = true;
 const scanner = new Html5QrcodeScanner('reader', {
     qrbox: {
         height: 250,
@@ -21,7 +21,7 @@ function isScannerOn() {
 
 /**
  * @typedef {Object} Card
- * @property {"classico" | "grattacieli" | "vincicasa"} gioco Can assume values: {'classico', 'grattacieli', 'vincicasa'} 
+ * @property {"classico" | "grattacieli" | "vincicasa" | "sivincetutto" } gioco Can assume values: {'classico', 'grattacieli', 'vincicasa'} 
  * @property {String} contest Contest number for game
  * @property {String} id Indicates identification for specific card
  * @property {string} amount Indicates amount won.
@@ -36,24 +36,26 @@ function isScannerOn() {
  * Parameter archive is altered by this operation (new row is added to it.)
  */
 function addCardToArchive(card, archive) {
-    let gioco = card['gioco'];
+    let gioco = dict[card['gioco']];
     let contest = card['contest'];
     let id = card['idschedina'];
     let amount = card['amount'];
 
     let newOutcome = document.createElement('tr');
-    if (amount > 0)
-        newOutcome.classList.add("bg-success")
-    else
-        newOutcome.classList.add("bg-danger")
     let gametd = document.createElement('td');
     let contesttd = document.createElement('td');
     let idtd = document.createElement('td');
+    idtd.style.overflowWrap = 'break-word';
     let amounttd = document.createElement('td');
+
+    if (amount > 0)
+        amounttd.style.color = "#0F0"
+    else
+        amounttd.style.color = "#F00"
 
     gametd.innerText = gioco;
     contesttd.innerText = contest;
-    idtd.innerText = id;
+    idtd.innerText = id.substring(0, 4) + '...' + id.substring(id.length - 4, id.length);
     amounttd.innerText = amount;
     amounttd.classList.add('amount');
 
@@ -122,7 +124,6 @@ function closePopup(acceptSaveOutcome) {
 
         if (!gameAlreadyScanned) {
             currentSavedGames.push(currentGame);
-
             localStorage.setItem("savedGames", JSON.stringify(currentSavedGames));
             let outcomeList = document.getElementById('winArchive');
 
@@ -135,10 +136,13 @@ function closePopup(acceptSaveOutcome) {
         if (clearButton.hidden == true)
             clearButton.hidden = false;
         document.getElementById("winTotal").hidden = false;
+
     }
     let popup = document.getElementById('popup');
     popup.classList.remove('open-popup');
     scanner.render(success, error);
+    archiveClickable = false;
+    setTimeout(() => { archiveClickable = true }, 3000);
 }
 
 function showHidden() {
@@ -160,7 +164,6 @@ function success(res) {
     const y = url.searchParams.get('Y');
     const c = url.searchParams.get('C');
     const prsn = url.searchParams.get('PrSN');
-    // const gt = dict[document.getElementsByClassName("nav__link--active")[0].innerText];
 
     $.ajax({
         type: 'POST',
@@ -218,10 +221,12 @@ function toggleArchive() {
     }
     else {
         if (!isScannerOn() || isScannerOn() && scanner.getState() != 2) {
-            let archive = document.getElementById("archive");
-            let archiveButton = document.getElementById("archiveButton");
-            archiveButton.classList.add("activeArchive");
-            archive.classList.add("open-popup");
+            if (archiveClickable) {
+                let archive = document.getElementById("archive");
+                let archiveButton = document.getElementById("archiveButton");
+                archiveButton.classList.add("activeArchive");
+                archive.classList.add("open-popup");
+            }
         }
         if (isScannerOn() && scanner.getState() == 2) {
             if (archiveButton) {

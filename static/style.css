@@ -68,12 +68,15 @@
     visibility: hidden;
     transition: 0.4s, top 0.4s;
     z-index: 100;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
-.forcesize {
+/* .forcesize {
     width: 500px !important;
     height: 500px !important;
-}
+} */
 
 .open-popup {
     visibility: visible;
