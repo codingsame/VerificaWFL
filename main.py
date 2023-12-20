@@ -133,23 +133,25 @@ def calculate_win_amount(no: str, game_id: str, year: str, game: str) -> dict[st
     amount = 0
     resp = make_api_request(no, year, game_id, game)
     parsed_response = json.loads(resp)
-    try:
-        timestamp_concorso = float(
-            parsed_response["concorso"]["dataEstrazione"])
-    except Exception as e:
-        timestamp_concorso = None
+    # try:
+    #     timestamp_concorso = float(
+    #         parsed_response["concorso"]["dataEstrazione"])
+    # except Exception as e:
+    #     timestamp_concorso = None
 
-    timestamp_ora = datetime.now().timestamp()
-    if timestamp_concorso:
-        if timestamp_concorso > timestamp_ora * 1000:
-            return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': -1}
-        winnings = parsed_response["vincita"]
-        for winning in winnings:
-            winning_type = winning["tipoDiVincita"]
-            amount += float((float(winning_type["count"]) *
-                            float(winning_type["valore"])) / 100)
-        return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': amount}
-    return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': -2}
+    # timestamp_ora = datetime.now().timestamp()
+    # if timestamp_concorso:
+    if parsed_response["combinazioneVincente"] == []:
+        return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': -1}
+
+    winnings = parsed_response["vincita"]
+    for winning in winnings:
+        winning_type = winning["tipoDiVincita"]
+        amount += float((float(winning_type["count"]) *
+                        float(winning_type["valore"])) / 100)
+    return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': amount}
+
+    # return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': -2}
 
 
 app = Flask(__name__)
