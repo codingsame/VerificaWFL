@@ -10,6 +10,29 @@ from flask import Flask, render_template, request
 
 from data import headers
 
+# TODO: Include case when dataEstrazione has passed but server doesn't return info yet.
+# Response example:
+# {
+# "ricevitoria":null,
+# "concorso":null,
+# "statoBiglietto":null,
+# "combinazioneVincente":null,
+# "vincita":[],
+# "numeroOpzionale":null,
+# "promozione":null,
+# "responseStatus":{
+#     "code":"2",
+#     "descr":null,
+#     "message":"Servizio non disponibile. Riprovare piu tardi"
+# },
+# "bacheca":null,
+# "serialNumber":null,
+# "sideGames":null,
+# "infoGiocata":null,
+# "winbox":null,
+# "codiceWinbox":null
+# }
+
 
 def detect_game(year: str, card_id: str) -> Literal["classico", "grattacieli", "vincicasa", None]:
     """
@@ -96,6 +119,7 @@ def make_api_request(contest_no: str, contest_year: str, contest_id: str, game: 
         json=json_data,
         timeout=10
     )
+    print(response.text)
     return response.text
 
 
@@ -108,17 +132,24 @@ def calculate_win_amount(no: str, game_id: str, year: str, game: str) -> dict[st
     """
     amount = 0
     resp = make_api_request(no, year, game_id, game)
-    d = json.loads(resp)
-    timestamp_concorso = float(d["concorso"]["dataEstrazione"])
+    parsed_response = json.loads(resp)
+    try:
+        timestamp_concorso = float(
+            parsed_response["concorso"]["dataEstrazione"])
+    except Exception as e:
+        timestamp_concorso = None
+
     timestamp_ora = datetime.now().timestamp()
-    if timestamp_concorso > timestamp_ora * 1000:
-        return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': -1}
-    unparsed_weens = d["vincita"]
-    for ween in unparsed_weens:
-        ween_type = ween["tipoDiVincita"]
-        amount += float((float(ween_type["count"]) *
-                         float(ween_type["valore"])) / 100)
-    return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': amount}
+    if timestamp_concorso:
+        if timestamp_concorso > timestamp_ora * 1000:
+            return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': -1}
+        winnings = parsed_response["vincita"]
+        for winning in winnings:
+            winning_type = winning["tipoDiVincita"]
+            amount += float((float(winning_type["count"]) *
+                            float(winning_type["valore"])) / 100)
+        return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': amount}
+    return {'contest': no, 'idschedina': game_id, 'gioco': game, 'amount': -2}
 
 
 app = Flask(__name__)

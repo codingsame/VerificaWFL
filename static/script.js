@@ -179,22 +179,30 @@ function success(res) {
             let msg_element = document.getElementById('win-message');
             let popup = document.getElementById('popup');
             let image = document.getElementById('outcome');
+            let dialogue = document.getElementById('dialogue-msg');
             if (resp['amount'] == -2) {
-                // TODO: Aggiungere codice che gestisca "Gioco non supportato".    
+                winmsg = "Gioco non supportato.";
+                image.src = `${window.static_folder}/question.png`;
+                dialogue.innerText = 'Questo gioco non è supportato.';
+                document.getElementById("addButton").hidden = true;
+                document.getElementById("skipButton").classList.add("flex-fill");
             }
             else if (resp['amount'] == -1) {
                 winmsg = "Estrazione non ancora svolta.";
-                image.src = `${window.static_folder}/question.png`
+                image.src = `${window.static_folder}/question.png`;
+                dialogue.innerText = 'Questa estrazione non è stata ancora svolta. Riprova più tardi.';
                 document.getElementById("addButton").hidden = true;
-                document.getElementById("skipButton").classList.add("flex-fill")
+                document.getElementById("skipButton").classList.add("flex-fill");
             }
             else if (resp['amount'] == 0) {
                 winmsg = "Schedina non vincente";
-                image.src = `${window.static_folder}/fail.png`
+                dialogue.innerText = 'Vuoi aggiungere questa schedina al tuo archivio?';
+                image.src = `${window.static_folder}/fail.png`;
             }
             else {
                 winmsg = "Hai vinto " + resp['amount'] + "€.";
-                image.src = `${window.static_folder}/tick.png`
+                dialogue.innerText = 'Vuoi aggiungere questa schedina al tuo archivio?';
+                image.src = `${window.static_folder}/tick.png`;
             }
             msg_element.innerText = winmsg;
             popup.classList.add('open-popup');
