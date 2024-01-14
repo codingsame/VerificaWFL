@@ -106,6 +106,12 @@ function clearArchive() {
     }
 }
 
+
+/**
+ * @param {boolean} acceptSaveOutcome Set to 1 if user wants to add game to archive, else 0.
+ * Resets pop-up window on user input. If user decides to save, then it iterates through currently
+ * saved games to see if current game was already added. If it wasn't, it is added to the archive.
+ */
 function closePopup(acceptSaveOutcome) {
     document.getElementById("addButton").hidden = false;
     document.getElementById("skipButton").classList.remove("flex-fill");
