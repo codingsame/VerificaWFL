@@ -10,9 +10,9 @@ from flask import Flask, render_template, request
 from data import headers
 
 
-def detect_game(year: str, card_id: str) -> Literal["classico", "grattacieli", "vincicasa", None]:
+def detect_game(year: str, ticket_id: str) -> Literal["classico", "grattacieli", "vincicasa", None]:
     """
-    Uses card_id to determine whether the card is valid for a game. If it is, returns the game it
+    Uses ticket_id to determine whether the card is valid for a game. If it is, returns the game it
     is valid for.
     """
     games = {
@@ -65,14 +65,14 @@ def detect_game(year: str, card_id: str) -> Literal["classico", "grattacieli", "
         pc = p[siglagioco]
         regex_string = r'^' + re.escape(annoult) + r'(\w{' + re.escape(_c) + r'}|\w{' + re.escape(
             str(bc)) + r'})(' + re.escape(mc) + r'|' + re.escape(pc) + r')(\w{1})$'
-        if re.match(regex_string, card_id):
+        if re.match(regex_string, ticket_id):
             return games[siglagioco]
     return None
 
 
 def parse_link(qr_link: str) -> tuple[str, str, str]:
     """
-    Parses contest number, card id and contest year from QR Code URL.
+    Parses contest number, ticket id and contest year from QR Code URL.
     """
     parsed_url = urlparse(qr_link)
     contest_no = parse_qs(parsed_url.query)["C"][0]
@@ -144,7 +144,7 @@ def my_form():
 @app.route('/checkwin', methods=['POST'])
 def checkwin():
     """
-    Is called with data retrieved from card's QR Code. Returns
+    Is called with data retrieved from ticket's QR Code. Returns
     useful data that's used to fill response to client.
     """
     form = request.form
